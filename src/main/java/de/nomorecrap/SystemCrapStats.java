@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SystemCrapStats {
 
-	
+
 	private float total;
 	private float crapNumber;
 	private float median;
@@ -35,7 +35,7 @@ public class SystemCrapStats {
   private float crapPercentCriticalThreshold;
 private GlobalStats globalStats;
 private String server;
-	
+
 	public SystemCrapStats(List<? extends Crap> crapValues,
                            String name,
                            CrapProject crapProject,
@@ -69,7 +69,7 @@ private String server;
     for (Crap method : crapValues) {
       crapLoad += method.getCrapLoad(crapThreshold);
     }
-    return crapLoad;    
+    return crapLoad;
   }
 
   private int countCrapMethods(List<? extends Crap> crapValues) {
@@ -93,7 +93,7 @@ private String server;
 		if (crapValues == null/* || crapValues.size() < 1*/)
 			throw new IllegalArgumentException("Cannot compute for null values");
 	}
-	
+
 	public float getCrapNumber() {
 		return crapNumber;
 	}
@@ -177,13 +177,13 @@ private String server;
 	public void printAllSubjectComplexities() {
 		List<? extends Crap> crapValues = getSubjects();
 		System.out.println("Subject breakdown");
-		System.out.println("----------------------");	
+		System.out.println("----------------------");
 		Collections.sort(crapValues, Crap.comparator);
 		for (Crap crap : crapValues) {
 			System.out.println(crap);
 		}
 	}
-  
+
   public String toXml() {
     MyStringBuilder s = new MyStringBuilder();
     s.start("<crap_result>");
@@ -198,7 +198,7 @@ private String server;
     s.start("<stats>");
     NumberFormat nf = FormatUtil.getNumberFormatter();
     writeEachStat(s, nf);
-    
+
     int ones = crapLessThan(2.0f);
     int twos = (crapBetween(2.0f, 4.0f));
     int fours = (crapBetween(4.0f, 8.0f));
@@ -208,12 +208,12 @@ private String server;
     int sixtyfours = (crapBetween(64.0f, 128.0f));
     int one28s = (crapBetween(128.0f, 256.0f));
     int two56s = (crapGE(256.0f));
-    
+
     String projectName = URLEncoder.encode(crapProject.getProjectName());
-    writeShareUrl(s, projectName, 
+    writeShareUrl(s, projectName,
                   ones, twos, fours, eights, sixteens, thirtytwos, sixtyfours, one28s, two56s);
-    
-    writeHistogram(s, nf, 
+
+    writeHistogram(s, nf,
                    ones, twos, fours, eights, sixteens, thirtytwos, sixtyfours, one28s, two56s);
     s.end("</stats>");
   }
@@ -302,7 +302,7 @@ private String server;
 
   private float adjustedHeight(int ones, float scale) {
     float minHeight = 28;
-    if (ones > 0) 
+    if (ones > 0)
       return Math.max(ones  * scale, minHeight);
     else
       return 0f;
@@ -333,7 +333,7 @@ private String server;
     }
     return count;
   }
-  
+
   private int crapGE(float f) {
     int count = 0;
     for (Crap method : crapSubjects) {
@@ -357,8 +357,8 @@ private String server;
   }
 
   public void generatePicture() {
-    CrapImageGenerator cig = new CrapImageGenerator(crapMethodPercent(), 
-                                                  crapProject.outputDir(), 
+    CrapImageGenerator cig = new CrapImageGenerator(crapMethodPercent(),
+                                                  crapProject.outputDir(),
                                                   "crapGauge.png",
                                                   crapPercentWarningThreshold,
                                                   crapPercentCriticalThreshold);
@@ -366,8 +366,8 @@ private String server;
   }
 
   public void generateBarPicture() {
-    NewCrapImageGenerator cig = new NewCrapImageGenerator(crapMethodPercent(), 
-                                                  crapProject.outputDir(), 
+    NewCrapImageGenerator cig = new NewCrapImageGenerator(crapMethodPercent(),
+                                                  crapProject.outputDir(),
                                                   "crapBar.png", false, /*
                                                   crapPercentWarningThreshold,*/
                                                   crapPercentCriticalThreshold * 100.0f,
@@ -375,7 +375,7 @@ private String server;
     cig.makeGaugeAndWriteToFile();
   }
 
-  
+
   public void generateHtml() {
     copyImages();
     try {
@@ -387,15 +387,15 @@ private String server;
       generateDetailCoveragePage(xmlFile);
     } catch (Exception ex) {
       ex.printStackTrace();
-    } 
+    }
   }
 
   private void copyImages() {
-    copyFile(getRelativeResource("g_backbar.gif"), 
+    copyFile(getRelativeResource("/images/g_backbar.gif"),
              new File(crapProject.outputDir(), "g_backbar.gif"));
-    copyFile(getRelativeResource("g_colorbar3.jpg"), 
+    copyFile(getRelativeResource("/images/g_colorbar3.jpg"),
         new File(crapProject.outputDir(), "g_colorbar3.jpg"));
-    
+
   }
 
   public void copyFile(InputStream stream, File outFile) {
@@ -416,34 +416,34 @@ private String server;
   }
 
   private void generateMainPage(StreamSource xmlFile) throws FileNotFoundException, TransformerFactoryConfigurationError, TransformerConfigurationException, TransformerException {
-    InputStream xslt = getRelativeResource("report.xslt");
-    File outDetail = crapProject.getReportHtmlFile();    
+    InputStream xslt = getRelativeResource("/xslt/report.xslt");
+    File outDetail = crapProject.getReportHtmlFile();
     makeHtml(xmlFile, xslt, outDetail);
   }
 
   private void generateDetailCrapPage(StreamSource xmlFile) throws FileNotFoundException, TransformerFactoryConfigurationError, TransformerConfigurationException, TransformerException {
-    InputStream xslt = getRelativeResource("detail_crap.xslt");
+    InputStream xslt = getRelativeResource("/xslt/detail_crap.xslt");
     File outDetail = new File(crapProject.outputDir(), "detail_crap.html");
 
     makeHtml(xmlFile, xslt, outDetail);
   }
 
   private void generateDetailCrapLoadPage(StreamSource xmlFile) throws FileNotFoundException, TransformerFactoryConfigurationError, TransformerConfigurationException, TransformerException {
-    InputStream xslt = getRelativeResource("detail_crap_load.xslt");
+    InputStream xslt = getRelativeResource("/xslt/detail_crap_load.xslt");
     File outDetail = new File(crapProject.outputDir(), "detail_crap_load.html");
 
     makeHtml(xmlFile, xslt, outDetail);
   }
-  
+
   private void generateDetailComplexityPage(StreamSource xmlFile) throws FileNotFoundException, TransformerFactoryConfigurationError, TransformerConfigurationException, TransformerException {
-    InputStream xslt = getRelativeResource("detail_complexity.xslt");
+    InputStream xslt = getRelativeResource("/xslt/detail_complexity.xslt");
     File outDetail = new File(crapProject.outputDir(), "detail_complexity.html");
 
     makeHtml(xmlFile, xslt, outDetail);
   }
 
   private void generateDetailCoveragePage(StreamSource xmlFile) throws FileNotFoundException, TransformerFactoryConfigurationError, TransformerConfigurationException, TransformerException {
-    InputStream xslt = getRelativeResource("detail_coverage.xslt");
+    InputStream xslt = getRelativeResource("/xslt/detail_coverage.xslt");
     File outDetail = new File(crapProject.outputDir(), "detail_coverage.html");
 
     makeHtml(xmlFile, xslt, outDetail);

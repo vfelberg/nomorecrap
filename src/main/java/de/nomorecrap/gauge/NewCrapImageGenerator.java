@@ -31,10 +31,10 @@ import java.io.IOException;
 
 public class NewCrapImageGenerator {
 
-  private static final String NB_GIF = "background.gif";
-  private static final String MARKER_GIF = "marker.gif";
-  private static final String NEEDLE_GIF = "needle.gif";
-  private static final String BACKGROUND_GIF = "meter_background.gif";
+  private static final String NB_GIF = "/images/background.gif";
+  private static final String MARKER_GIF = "/images/marker.gif";
+  private static final String NEEDLE_GIF = "/images/needle.gif";
+  private static final String BACKGROUND_GIF = "/images/meter_background.gif";
   private Image gauge;
   private Image needle;
   private float crapScore;
@@ -123,7 +123,7 @@ public class NewCrapImageGenerator {
   private void drawLegend(Graphics2D graphics, int barWidth, int yPosition, int xOffset) {
     int markerbaseWidth = 10;
     int markerHeight = 8;
-    
+
     Font currFont = graphics.getFont();
     Font bigger = currFont.deriveFont(Font.PLAIN, 10);
     graphics.setFont(bigger);
@@ -146,7 +146,7 @@ public class NewCrapImageGenerator {
 
     drawUpwardMarker(graphics, markerbaseWidth, markerHeight, x, yPosition);
     drawText(graphics, x + 14, yPosition, yourScore);
-    
+
     int downMarkerX = x + spacer;
     drawDownwardMarker(graphics, markerbaseWidth, markerHeight, downMarkerX, yPosition - markerHeight);
     drawText(graphics, downMarkerX + 14, yPosition, avgScore);
@@ -157,7 +157,7 @@ public class NewCrapImageGenerator {
     graphics.setColor(Color.BLACK);
     graphics.drawString(text, width, (float)height);
   }
-  
+
   private void drawShadowRect(Graphics2D imageGraphics, int xOffset, int yOffset, int width, int height) {
     Color gray = getShadowColor();
     imageGraphics.setColor(gray);
@@ -207,20 +207,20 @@ public class NewCrapImageGenerator {
     imageGraphics.drawRect(xOffset, yOffset, x, y);
   }
 
-  private void drawProjectMarker(int scaleWidth, int height, 
-                                 Graphics2D graphics, 
-                                 float crapScore, 
-                                 int xOffset, 
+  private void drawProjectMarker(int scaleWidth, int height,
+                                 Graphics2D graphics,
+                                 float crapScore,
+                                 int xOffset,
                                  int markerbaseWidth, int markerHeight) {
-    
+
     int x = scaleOffsetForScore(scaleWidth, crapScore, xOffset, markerbaseWidth);
     int y = height;
-    drawUpwardMarker(graphics, markerbaseWidth, markerHeight, x, y);    
+    drawUpwardMarker(graphics, markerbaseWidth, markerHeight, x, y);
     drawCrapScore(scaleWidth, height, graphics, crapScore, x, y + 2);
   }
 
   private int scaleOffsetForScore(int scaleWidth, float crapScore, int xOffset, int markerbaseWidth) {
-    return crapScore > MAX_INCR ? (scaleWidth + (xOffset - markerbaseWidth / 2)) 
+    return crapScore > MAX_INCR ? (scaleWidth + (xOffset - markerbaseWidth / 2))
                                  : getPixelScore(crapScore, xOffset, scaleWidth, markerbaseWidth);
   }
 
@@ -237,32 +237,32 @@ public class NewCrapImageGenerator {
   }
 
   private Polygon makeTrianglePointDown(int needleW, int needleH, int shadowX1, int shadowY1) {
-    return makeTriangle(shadowX1, shadowY1, 
-                        shadowX1 + needleW, shadowY1, 
-                        shadowX1 + needleW / 2, shadowY1 + needleH);  
+    return makeTriangle(shadowX1, shadowY1,
+                        shadowX1 + needleW, shadowY1,
+                        shadowX1 + needleW / 2, shadowY1 + needleH);
   }
-  
+
   private Polygon makeTrianglePointUp(int needleW, int needleH, int shadowX1, int shadowY1) {
     int shadowX2 = shadowX1 + needleW / 2;
     int shadowY3 = shadowY1;
     int shadowY2 = shadowY3 - needleH;
     int shadowX3 = shadowX1 + needleW;
-    return makeTriangle(shadowX1, shadowY3, 
-                        shadowX2, shadowY2, 
+    return makeTriangle(shadowX1, shadowY3,
+                        shadowX2, shadowY2,
                         shadowX3, shadowY3);
   }
 
-  private Polygon makeTriangle(int x1, int y1, 
-                               int x2, int y2, 
+  private Polygon makeTriangle(int x1, int y1,
+                               int x2, int y2,
                                int x3, int y3) {
-    
-    return new Polygon(new int[] { x1, x2, x3 }, 
-                       new int[] { y1, y2, y3 }, 
+
+    return new Polygon(new int[] { x1, x2, x3 },
+                       new int[] { y1, y2, y3 },
                        3);
   }
 
-  private void drawGlobalAvgMarker(int scaleWidth, int h, Graphics2D big, 
-                                   float crapScore, int offset, 
+  private void drawGlobalAvgMarker(int scaleWidth, int h, Graphics2D big,
+                                   float crapScore, int offset,
                                    int markerWidth, int markerHeight) {
     int x = scaleOffsetForScore(scaleWidth, crapScore, offset, markerWidth);
     int y = (int) (h);
