@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="nomorecrap" basedir=".." default="run-nomorecrap" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <property name="NOMORECRAP_HOME" value="${basedir}/target"/>
+
+    <taskdef name="nomorecrap" classname="de.nomorecrap.anttask.NoMoreCrapAntTask">
+        <classpath>
+            <fileset dir="${NOMORECRAP_HOME}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${basedir}/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <artifact:dependencies filesetId="maven.dependencies">
+        <dependency groupId="args4j" artifactId="args4j" version="2.0.25"/>
+        <dependency groupId="commons-httpclient" artifactId="commons-httpclient" version="3.1"/>
+    </artifact:dependencies>
+    <copy todir="${basedir}/target/lib">
+        <fileset refid="maven.dependencies" />
+        <!-- This mapper strips off all leading directory information -->
+        <mapper type="flatten" />
+    </copy>
+
+    <property name="my.project.root.dir" value="${basedir}"/>
+    <target name="run-nomorecrap">
+        <nomorecrap crap4jhome="${NOMORECRAP_HOME}"
+                    projectdir="${my.project.root.dir}"
+                    outputDir="agitar/reports/crap4j"
+                    dontTest="false"
+                    debug="false">
+            <classes>
+                <!-- put the project's class directories here. These are the classes you want crap numbers for -->
+                <pathElement location="${my.project.root.dir}/target/classes"/>
+            </classes>
+            <srces>
+                <!-- The project's src folders -->
+                <pathElement location="${my.project.root.dir}/src/main/java"/>
+            </srces>
+            <testClasses>
+                <!-- The project's test classes.
+﻿  ﻿  ﻿  ﻿           Note, separating it from the project classes makes life so much easier
+﻿  ﻿  ﻿  ﻿           but if you didn't, then you probably just want to repeat the classDir entry here -->
+                <pathElement location="${my.project.root.dir}/target/test-classes"/>
+            </testClasses>
+            <libClasspath>
+                <!-- Put the dependent paths and libraries here.
+﻿  ﻿  ﻿  ﻿           This is for stuff necessary to your project, but not stuff you want analyzed -->
+                <fileset dir="${my.project.root.dir}/target/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${basedir}/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <!-- if you get errors loading any agitar classes, like the mock classes, add this entry -->
+                <!--
+        ﻿  ﻿  ﻿  ﻿  <fileset dir="${CRAP4J_HOME}/lib/com.agitar.eclipse.api_4.2.0.401405/lib/ext">
+﻿  ﻿  ﻿  ﻿              <include name="**/*.jar" />
+                </fileset>
+﻿  ﻿  ﻿  ﻿          -->
+            </libClasspath>
+        </nomorecrap>
+    </target>
+</project>
