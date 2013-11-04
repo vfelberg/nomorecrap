@@ -23,5 +23,20 @@
             <artifactId>ant</artifactId>
             <version>1.9.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.agitar</groupId>
+            <artifactId>asmlib</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/asmlib.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.agitar</groupId>
+            <artifactId>coverage</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/com.agitar.coverage.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
