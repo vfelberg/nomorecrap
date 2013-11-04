@@ -12,46 +12,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Crap4jAntTask extends Task {
+public class NoMoreCrapAntTask extends Task {
 
 	private String crap4jHome;
 	private boolean debug;
 	private boolean dontTest;
 	private boolean downloadAverages = true;
 	private String server;
-	
+
 	private File projectDir;
 	private File outputDir;
-	
+
 	private Path libClasspath;
 	private Path classes;
 	private Path srces;
 	private Path testClasses;
 	private Project antProject;
-		
-	public Crap4jAntTask(Project p) {
+
+	public NoMoreCrapAntTask(Project p) {
 		this.antProject = p;
-	}	
-	
-	public Path createClasses() {    
+	}
+
+	public Path createClasses() {
 		if (classes == null)
 			classes = new Path(antProject);
         return classes.createPath();
     }
 
-	public Path createSrces() {    
+	public Path createSrces() {
 		if (srces == null)
 			srces = new Path(antProject);
         return srces.createPath();
     }
 
-	public Path createTestClasses() {    
+	public Path createTestClasses() {
 		if (testClasses == null)
 			testClasses = new Path(antProject);
         return testClasses.createPath();
     }
-	
-	public Path createLibClasspath() {    
+
+	public Path createLibClasspath() {
 		if (libClasspath == null)
 			libClasspath = new Path(antProject);
         return libClasspath.createPath();
@@ -62,11 +62,11 @@ public class Crap4jAntTask extends Task {
       this.server = "http://www.crap4j.org/benchmark/";
     return server;
   }
-  
+
   public void setServer(String server) {
     this.server = server;
   }
-  
+
   @Override
 	public void execute() throws BuildException {
     validate(getProjectDir());
@@ -76,7 +76,7 @@ public class Crap4jAntTask extends Task {
     }
 		CrapProject p = createCrapProject();
 		try {
-			Main.createMain().run(p, isDebug(), isDontTest(), isDownloadAverages(), getServer());
+			Main.createMain(crap4jHome).run(p, isDebug(), isDontTest(), isDownloadAverages(), getServer());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BuildException(e);
@@ -120,11 +120,11 @@ public class Crap4jAntTask extends Task {
 	}
 
   private CrapProject createCrapProject() {
-		CrapProject p = new CrapProject(getProjectDir().getAbsolutePath(), 
-				makeListFrom(getLibClasspath()), 
-				makeListFrom(getTestClasses()), 
-				makeListFrom(getClasses()), 
-				makeListFrom(getSrces()), 
+		CrapProject p = new CrapProject(getProjectDir().getAbsolutePath(),
+				makeListFrom(getLibClasspath()),
+				makeListFrom(getTestClasses()),
+				makeListFrom(getClasses()),
+				makeListFrom(getSrces()),
 				(getOutputDir() != null) ? getOutputDir().getAbsolutePath() : null);
 		return p;
 	}
@@ -133,9 +133,9 @@ public class Crap4jAntTask extends Task {
 		List<String> list = new ArrayList<String>();
 		if (path == null)
 		  return list;
-		
+
 		for (String string : path.list()) {
-			list.add(string);			
+			list.add(string);
 		}
 		return list;
 	}
@@ -164,7 +164,7 @@ public class Crap4jAntTask extends Task {
 		this.dontTest = dontTest;
 	}
 
-	
+
 	public Path getLibClasspath() {
 		return libClasspath;
 	}
