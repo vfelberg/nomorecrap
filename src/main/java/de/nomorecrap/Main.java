@@ -10,9 +10,9 @@ import com.agitar.org.objectweb.asm.tree.analysis.AnalyzerException;
 
 /**
  * This is the command line launcher and command line ant launcher for the Crap4jRunner.
- * 
+ *
  * The other option is the eclipse launcher, Crap4jAction.
- * 
+ *
  * @author bobevans
  *
  */
@@ -23,30 +23,30 @@ public class Main {
 	public String agitatorEclipseCoveragePluginDir;
 	public String junitLib;
 
-  public static Main createMain() {
-    String crap4jHome = getCrap4jHome();
+  public static Main createMain(String crap4jHome) {
+    //String crap4jHome = getCrap4jHome();
     String agitatorEclipseApiPlugin = getAgitatorEclipseApiPlugin(crap4jHome);
     String agitatorEclipseCoveragePluginDir = getAgitatorEclipseCoveragePluginDir(crap4jHome);
     String junitLib = getJunitLib(agitatorEclipseApiPlugin);
     String antHome = getAntHome(agitatorEclipseApiPlugin);
-    
-    Main main = Main.createMain(crap4jHome, 
-                            agitatorEclipseApiPlugin, 
-                            agitatorEclipseCoveragePluginDir, 
-                            junitLib, 
+
+    Main main = Main.createMain(crap4jHome,
+                            agitatorEclipseApiPlugin,
+                            agitatorEclipseCoveragePluginDir,
+                            junitLib,
                             antHome);
     return main;
   }
 
 
-	public static Main createMain(String crap4jHome, 
-                                              String agitatorEclipseApiPlugin, 
-                                              String agitatorEclipseCoveragePluginDir, 
+	public static Main createMain(String crap4jHome,
+                                              String agitatorEclipseApiPlugin,
+                                              String agitatorEclipseCoveragePluginDir,
                                               String junitLib, String antHome) {
-			return new Main(crap4jHome, 
-                          agitatorEclipseApiPlugin, 
-                          agitatorEclipseCoveragePluginDir, 
-                          junitLib, 
+			return new Main(crap4jHome,
+                          agitatorEclipseApiPlugin,
+                          agitatorEclipseCoveragePluginDir,
+                          junitLib,
                           antHome);
 	}
 
@@ -58,7 +58,7 @@ public class Main {
 		try {
 			this.crap4jHome = crap4jHome;
       this.agitatorEclipseApiPluginDir = agitatorEclipseApiPlugin;
-      this.agitatorEclipseCoveragePluginDir = agitatorEclipseCoveragePluginDir;        
+      this.agitatorEclipseCoveragePluginDir = agitatorEclipseCoveragePluginDir;
       this.junitLib = junitLib;
       this.antHome = antHome;
 		} catch (Exception e) {
@@ -114,7 +114,7 @@ public class Main {
   }
 
 	private static String getCrap4jHomeFromClass() {
-		URL foo = Main.class.getResource("foo");
+		URL foo = Main.class.getResource("Main.class");
 		String filePath = foo.getPath();
 
 		int lastIndexOf = filePath.lastIndexOf(File.separator+"lib"+File.separator);
@@ -127,20 +127,20 @@ public class Main {
 		} else
 		  return filePath.substring(5, lastIndexOf);
 	}
-  
+
 	public static void main(String[] args) {
 		Options options = parseArgs(args);
 		if (!options.valid()) {
 			System.exit(1);
 		}
-		CrapProject p = new CrapProject(options.getProjectDir(), 
-                                    options.getLibClasspaths(), 
-                                    options.getTestClassDirs(), 
-                                    options.getClassDirs(), 
-                                    options.getSourceDirs(), 
+		CrapProject p = new CrapProject(options.getProjectDir(),
+                                    options.getLibClasspaths(),
+                                    options.getTestClassDirs(),
+                                    options.getClassDirs(),
+                                    options.getSourceDirs(),
                                     options.getOutputDir());
 		try {
-			Main main = createMain();
+			Main main = createMain("");
 			main.run(p, options.getDebug(), options.getDontTest(), options.getDownloadAverages(), options.getServer());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,17 +148,17 @@ public class Main {
 	}
 
 
-  public void run(CrapProject project, 
-                  boolean debug, 
-                  boolean dontTest, 
-                  boolean downloadAverages, 
+  public void run(CrapProject project,
+                  boolean debug,
+                  boolean dontTest,
+                  boolean downloadAverages,
                   String server) throws IOException, AnalyzerException {
-    Crap4jRunner runner = new Crap4jRunner(debug, 
-                                           dontTest, 
-                                           downloadAverages, 
-                                           new AntSuperrunnerCoverageStrategy(this), 30.0f, 10.0f, 
+    Crap4jRunner runner = new Crap4jRunner(debug,
+                                           dontTest,
+                                           downloadAverages,
+                                           new AntSuperrunnerCoverageStrategy(this), 30.0f, 10.0f,
                                            5.0f, server);
-    runner.doProject(project);      
+    runner.doProject(project);
   }
 
 	public static Options parseArgs(String[] args) {
