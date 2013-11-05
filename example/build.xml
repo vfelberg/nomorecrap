@@ -2,7 +2,7 @@
 <project name="nomorecrap" basedir=".." default="run-nomorecrap" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <property name="NOMORECRAP_HOME" value="${basedir}/target"/>
 
-    <taskdef name="nomorecrap" classname="de.nomorecrap.anttask.NoMoreCrapAntTask">
+    <taskdef name="nomorecrap" classname="de.nomorecrap.crap4j.anttask.NoMoreCrapAntTask">
         <classpath>
             <fileset dir="${NOMORECRAP_HOME}">
                 <include name="**/*.jar"/>
@@ -54,11 +54,9 @@
                     <include name="**/*.jar"/>
                 </fileset>
                 <!-- if you get errors loading any agitar classes, like the mock classes, add this entry -->
-                <!--
-        ﻿  ﻿  ﻿  ﻿  <fileset dir="${CRAP4J_HOME}/lib/com.agitar.eclipse.api_4.2.0.401405/lib/ext">
-﻿  ﻿  ﻿  ﻿              <include name="**/*.jar" />
+                <fileset dir="${basedir}/lib/com.agitar.eclipse.api_4.2.0.401405/lib/ext">
+                    <include name="**/*.jar" />
                 </fileset>
-﻿  ﻿  ﻿  ﻿          -->
             </libClasspath>
         </nomorecrap>
     </target>
